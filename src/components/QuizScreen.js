@@ -7,21 +7,12 @@ import ApiUrlConstants from "../api/ApiUrlConstants";
 function QuizScreen(/*object*/ props) {
 	
 	const [quizRawData, setQuizRawData] = React.useState([])
-	const [allQuizzes, setAllQuizes] = React.useState([]);
+	const [allQuizzes, setAllQuizzes] = React.useState([]);
 	const [quiz, setQuiz] = React.useState({
-		category: "",
-		difficulty: "",
 		question: "",
 		correct_answer: "",
 		incorrect_answers: []
 	});
-	
-	function fetchQuizDataFromOnlineSource() {
-		const geographyQuizUrl = new ApiUrlConstants().getUrl(/*for:*/ "geography");
-		new ApiService(/*url:*/ geographyQuizUrl)
-			.fetchData()
-			.then(quizData => setQuizRawData(quizData.results));
-	}
 	
 	React.useEffect(
 		() => {
@@ -31,12 +22,53 @@ function QuizScreen(/*object*/ props) {
 		}, /*dependency array*/ [props.hasGameStarted]
 	);
 	
-	const quizElements = quizRawData.map(quiz => {
+	React.useEffect(
+		() => {
+			setAllQuizzes(/* with: */
+				quizRawData.map(rawDataPiece => createQuizObject(/*from:*/ rawDataPiece))
+			);
+		}, /*dependency array*/ [quizRawData]
+	);
+	
+	function fetchQuizDataFromOnlineSource() {
+		const geographyQuizUrl = new ApiUrlConstants().getUrl(/*for:*/ "geography");
+		new ApiService(/*url:*/ geographyQuizUrl)
+			.fetchData()
+			.then(quizData => setQuizRawData(/*with:*/ quizData.results));
+	}
+	
+	function createQuizObject(/*object*/ dataItem) {
+		return {
+			id: nanoid(),
+			question: dataItem.question,
+			correctAnswer: dataItem.correct_answer,
+			allAnswers: createAllQuizAnswers(/*from:*/ dataItem)
+		}
+	}
+	
+	function createAllQuizAnswers(/*object*/ dataItem) {
+		// start with array of incorrect answers
+		let answersArray = dataItem.incorrect_answers;
+		
+		// insert correct answer at random place
+		const randomAnswerLocation = Math.floor(Math.random() * answersArray.length);
+		answersArray.splice(
+			/*at:*/ randomAnswerLocation,
+			/*deleteCount:*/ 0,
+			/*with:*/ dataItem.correct_answer
+		);
+		
+		return answersArray.map(answer => ({
+			id: nanoid(),
+			text: answer,
+			isSelected: false
+		}))
+	}
+	const quizElements = allQuizzes.map(quiz => {
 		return <Quiz
-			key={nanoid()}
+			key={quiz.id}
 			question={quiz.question}
-			correctAnswer={quiz.correct_answer}
-			incorrectAnswers={quiz.incorrect_answers}
+			allAnswers={quiz.allAnswers}
 		/>
 	});
 	

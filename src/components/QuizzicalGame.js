@@ -14,7 +14,7 @@ function QuizzicalGame() {
 			{
 				isGameStarted === false ?
 				<StartScreen onClick={didClickStartQuizButton} /> :
-				<QuizScreen />
+				<QuizScreen hasGameStarted={isGameStarted} />
 			}
 		</div>
 	);
