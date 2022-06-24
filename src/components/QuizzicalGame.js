@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import Confetti from "react-confetti";
 import Quiz from './Quiz';
 import StartScreen from "./StartScreen";
+import ApiUrlConstants from "../api/ApiUrlConstants";
+import ApiService from "../api/ApiService";
 
 function QuizzicalGame() {
 	const [hasStarted, setHasStarted] = useState(false)
@@ -14,17 +16,19 @@ function QuizzicalGame() {
 	useEffect(() => {
 		// Fetch data only if game has started
 		if (hasStarted) {
-			fetch(
-				"https://opentdb.com/api.php?amount=5&category=22&type=multiple"
-			)
-				.then((res) => res.json())
-				.then((data) => setQuizRawData(data.results))
+			fetchDataFromApiSource();
 		}
 	}, [hasStarted])
 	
 	useEffect(() => {
 		setAllQuizzes(quizRawData.map((item) => generateQuestionObject(item)))
 	}, [quizRawData])
+	
+	
+	function fetchDataFromApiSource() {
+		const url = new ApiUrlConstants().getUrl("geography");
+		new ApiService(url).fetchData().then(data => setQuizRawData(data.results));
+	}
 	
 	function generateQuestionObject(dataItem) {
 		return {
