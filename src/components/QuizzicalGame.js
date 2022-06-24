@@ -1,6 +1,6 @@
 import React from "react";
 import StartScreen from "./StartScreen";
-import QuestionScreen from "./QuestionScreen";
+import QuizScreen from "./QuizScreen";
 
 function QuizzicalGame() {
 	const [isGameStarted, setIsGameStarted] = React.useState(false);
@@ -14,7 +14,7 @@ function QuizzicalGame() {
 			{
 				isGameStarted === false ?
 				<StartScreen onClick={didClickStartQuizButton} /> :
-				<QuestionScreen />
+				<QuizScreen />
 			}
 		</div>
 	);

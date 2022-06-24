@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 import Quiz from "./Quiz";
 import ApiUrlConstants from "../api/ApiUrlConstants";
 
-function QuestionScreen() {
+function QuizScreen() {
 	
 	const [allQuizzes, setAllQuizes] = React.useState([]);
 	const [quiz, setQuiz] = React.useState({
@@ -43,4 +43,4 @@ function QuestionScreen() {
 	);
 }
 
-export default QuestionScreen;
+export default QuizScreen;
