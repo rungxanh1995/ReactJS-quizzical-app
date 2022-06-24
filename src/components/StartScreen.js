@@ -9,7 +9,7 @@ function StartScreen(/*Object*/ props) {
 			<p>
 				Are you a geography guru 🌏?<br/>Test it out yourself 😎
 			</p>
-			<button className={"btn btn--start-screen"} onClick={props.onClick}>
+			<button className={"btn btn--start-screen"} onClick={props.startQuiz}>
 				Start quiz
 			</button>
 		</div>
