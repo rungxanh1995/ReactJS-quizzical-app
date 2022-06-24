@@ -23,8 +23,8 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 600px;
-	width: 600px;
+	height: 650px;
+	width: 650px;
 	border-radius: 12px;
 }
 
@@ -127,4 +127,5 @@ body {
 	display: flex;
 	align-items: center;
 	gap: 20px;
+	padding-top: 30px;
 }
