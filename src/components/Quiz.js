@@ -7,30 +7,30 @@ function Quiz(/*object*/ props) {
 		const isAnswerCorrect = props.hasCheckedAnswers && (anAnswer.text === props.data.correctAnswer);
 		const isAnswerIncorrect = props.hasCheckedAnswers && anAnswer.isSelected;
 		
-		let name = 'quiz--answer-btn';
+		let className = 'quiz--answer-btn';
 		
 		if (hasSelectedAnswers) {
-			name += ' quiz--answer-selected';
+			className += ' quiz--answer-selected';
 		}
 		
 		if (isAnswerCorrect) {
-			name += ' quiz--answer-correct';
+			className += ' quiz--answer-correct';
 		}
 		
 		if (isAnswerIncorrect) {
-			name += ' quiz--answer-incorrect';
+			className += ' quiz--answer-incorrect';
 		}
 		
-		return name;
+		return className;
 	}
 	
-	let answerElements = props.data.answers.map((answer) => (
+	let answerElements = props.data.answers.map(eachAnswer => (
 		<button
-			className={decideClassNameFor(answer)}
+			className={decideClassNameFor(eachAnswer)}
 			onClick={props.selectAnswer}
-			id={answer.id}
-			key={answer.id}
-			dangerouslySetInnerHTML={{ __html: answer.text }}
+			id={eachAnswer.id}
+			key={eachAnswer.id}
+			dangerouslySetInnerHTML={{ __html: eachAnswer.text }}
 		/>
 	))
 	
