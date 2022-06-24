@@ -21,7 +21,7 @@ function QuizzicalGame() {
 	}, [hasStarted])
 	
 	useEffect(() => {
-		setAllQuizzes(quizRawData.map((item) => generateQuestionObject(item)))
+		setAllQuizzes(quizRawData.map((item) => createQuizObject(item)))
 	}, [quizRawData])
 	
 	
@@ -30,12 +30,12 @@ function QuizzicalGame() {
 		new ApiService(url).fetchData().then(data => setQuizRawData(data.results));
 	}
 	
-	function generateQuestionObject(dataItem) {
+	function createQuizObject(/* Object */ rawDataItem) {
 		return {
 			id: nanoid(),
-			question: dataItem.question,
-			correctAnswer: dataItem.correct_answer,
-			answers: generateAnswers(dataItem),
+			question: rawDataItem.question,
+			correctAnswer: rawDataItem.correct_answer,
+			answers: generateAnswers(rawDataItem),
 		}
 	}
 	
