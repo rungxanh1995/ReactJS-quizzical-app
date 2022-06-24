@@ -35,22 +35,26 @@ function QuizzicalGame() {
 			id: nanoid(),
 			question: rawDataItem.question,
 			correctAnswer: rawDataItem.correct_answer,
-			answers: generateAnswers(rawDataItem),
+			answers: createAndMapAnswerObjects(/* for: */ rawDataItem),
 		}
 	}
 	
-	function generateAnswers(dataItem) {
-		let answersArray = dataItem.incorrect_answers
+	function createAndMapAnswerObjects(/* Object */ rawDataItem) {
+		let answersArray = rawDataItem.incorrect_answers;
 		
 		// Insert correct answer randomly
-		const randomIndex = Math.floor(Math.random() * 3)
-		answersArray.splice(randomIndex, 0, dataItem.correct_answer)
+		const randomIndex = Math.floor(Math.random() * answersArray.length);
+		answersArray.splice(
+			/* at: */ randomIndex,
+			/* deleteCount: */ 0,
+			/* with: */ rawDataItem.correct_answer
+		);
 		
-		return answersArray.map((answer) => ({
+		return answersArray.map(answer => ({
 			id: nanoid(),
 			text: answer,
 			isSelected: false,
-		}))
+		}));
 	}
 	
 	function selectAnswer(questionId, answerId) {
