@@ -6,6 +6,7 @@ import ApiUrlConstants from "../api/ApiUrlConstants";
 
 function QuizScreen() {
 	
+	const [quizRawData, setQuizRawData] = React.useState([])
 	const [allQuizzes, setAllQuizes] = React.useState([]);
 	const [quiz, setQuiz] = React.useState({
 		category: "",
@@ -20,11 +21,11 @@ function QuizScreen() {
 			const geographyQuizUrl = new ApiUrlConstants().getUrl(/*for:*/ "geography");
 			new ApiService(/*url:*/ geographyQuizUrl)
 				.fetchData()
-				.then(quizData => setAllQuizes(quizData.results));
+				.then(quizData => setQuizRawData(quizData.results));
 		}, /*dependency array*/ []
 	);
 	
-	const quizElements = allQuizzes.map(quiz => {
+	const quizElements = quizRawData.map(quiz => {
 		return <Quiz
 			key={nanoid()}
 			question={quiz.question}
