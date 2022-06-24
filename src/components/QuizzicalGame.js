@@ -1,14 +1,14 @@
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
-import Quiz from './Quiz';
-import StartScreen from "./StartScreen";
 import ApiUrlConstants from "../api/ApiUrlConstants";
 import ApiService from "../api/ApiService";
+import StartScreen from "./StartScreen";
 import QuizScreen from "./QuizScreen";
+import Quiz from './Quiz';
 
 
 function QuizzicalGame() {
-	const [hasStarted, setHasStarted] = useState(false)
+	const [isGameStarted, setIsGameStarted] = useState(false)
 	const [hasCheckedAnswers, setHasCheckedAnswers] = useState(false)
 	const [quizRawData, setQuizRawData] = useState([])
 	const [allQuizzes, setAllQuizzes] = useState([])
@@ -16,19 +16,22 @@ function QuizzicalGame() {
 	
 	useEffect(() => {
 		// Fetch data only if game has started
-		if (hasStarted) {
+		if (isGameStarted) {
 			fetchDataFromApiSource();
 		}
-	}, [hasStarted])
+	}, [isGameStarted])
 	
 	useEffect(() => {
-		setAllQuizzes(quizRawData.map((item) => createQuizObject(item)))
+		const rawQuizToObjects = quizRawData.map(eachItem => createQuizObject(/* from: */ eachItem));
+		setAllQuizzes(/* to: */ rawQuizToObjects);
 	}, [quizRawData])
 	
 	
 	function fetchDataFromApiSource() {
 		const url = new ApiUrlConstants().getUrl("geography");
-		new ApiService(url).fetchData().then(data => setQuizRawData(data.results));
+		new ApiService(url)
+			.fetchData()
+			.then(data => setQuizRawData(/* to: */ data.results));
 	}
 	
 	function createQuizObject(/* Object */ rawDataItem) {
@@ -36,7 +39,7 @@ function QuizzicalGame() {
 			id: nanoid(),
 			question: rawDataItem.question,
 			correctAnswer: rawDataItem.correct_answer,
-			answers: createAndMapAnswerObjects(/* for: */ rawDataItem),
+			answers: createAndMapAnswerObjects(/* from: */ rawDataItem),
 		}
 	}
 	
@@ -51,69 +54,73 @@ function QuizzicalGame() {
 			/* with: */ rawDataItem.correct_answer
 		);
 		
-		return answersArray.map(answer => ({
+		return answersArray.map(eachAnswer => ({
 			id: nanoid(),
-			text: answer,
+			text: eachAnswer,
 			isSelected: false,
 		}));
 	}
 	
-	function selectAnswer(questionId, answerId) {
-		setAllQuizzes((oldQuestions) =>
-			oldQuestions.map((question) =>
-				question.id !== questionId
-					? question
-					: {
-						...question,
-						answers: question.answers.map((answer) =>
-							answer.id !== answerId
-								? { ...answer, isSelected: false }
-								: { ...answer, isSelected: true }
+	function selectAnswer(/* string */ quizId, /* string */ answerId) {
+		const moddedQuizzesByUser = (prevQuizzes) =>
+			prevQuizzes.map(eachQuiz =>
+				eachQuiz.id !== quizId ?
+					eachQuiz
+					:
+					{
+						...eachQuiz,
+						answers: eachQuiz.answers.map(eachAnswer =>
+							eachAnswer.id !== answerId ?
+								{ ...eachAnswer, isSelected: false }
+								:
+								{ ...eachAnswer, isSelected: true }
 						),
 					}
-			)
-		)
+			);
+		
+		setAllQuizzes(/* to: */ moddedQuizzesByUser);
 	}
 	
 	function checkAnswers() {
-		let correctAnswerCount = 0
-		allQuizzes.forEach((question) => {
-			const selectedAnswer = question.answers.find(
-				(answer) => answer.isSelected
-			)
-			if (selectedAnswer) {
-				if (selectedAnswer.text === question.correctAnswer) {
-					correctAnswerCount++
-				}
+		let correctAnswerCount = 0;
+		
+		allQuizzes.forEach(eachQuiz => {
+			const selectedAnswer = eachQuiz.answers.find(
+				itsAnswer => itsAnswer.isSelected
+			);
+			
+			if (selectedAnswer && selectedAnswer.text === eachQuiz.correctAnswer) {
+				correctAnswerCount++;
 			}
-		})
-		setRightAnswerCount(correctAnswerCount)
-		setHasCheckedAnswers(true)
+		});
+		
+		setRightAnswerCount(/* to: */ correctAnswerCount);
+		setHasCheckedAnswers(/* to: */ true);
 	}
 	
 	function playAgain() {
-		setRightAnswerCount(0)
-		setHasCheckedAnswers(false)
-		setHasStarted(false)
+		setRightAnswerCount(/* to: */ 0);
+		setHasCheckedAnswers(/* to: */ false);
+		setIsGameStarted(/* to: */ false);
 	}
 	
 	function startQuiz() {
-		setHasStarted(true)
+		setIsGameStarted(/* to: */ true);
 	}
 	
-	const questionElements = allQuizzes.map((question) => (
+	const quizElements = allQuizzes.map(eachQuiz => (
 		<Quiz
-			key={question.id}
-			data={question}
+			key={eachQuiz.id}
+			data={eachQuiz}
 			hasCheckedAnswers={hasCheckedAnswers}
-			selectAnswer={(e) => selectAnswer(question.id, e.target.id)}
+			selectAnswer={(event) => selectAnswer(eachQuiz.id, event.target.id)}
 		/>
 	))
 	
 	function showQuizzes() {
 		return (
 			<QuizScreen
-				quizComponentList={questionElements}
+				quizComponentList={quizElements}
 				hasCheckedAnswers={hasCheckedAnswers}
 				rightAnswerCount={rightAnswerCount}
 				allQuizzes={allQuizzes}
@@ -124,8 +131,8 @@ function QuizzicalGame() {
 	}
 	
 	return (
-		<div className="App">
-			{!hasStarted ? <StartScreen startQuiz={startQuiz} /> : showQuizzes()}
+		<div>
+			{!isGameStarted ? <StartScreen startQuiz={startQuiz} /> : showQuizzes()}
 		</div>
 	)
 }
