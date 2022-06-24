@@ -1,8 +1,9 @@
 import './App.css';
+import QuizzicalGame from "./components/QuizzicalGame";
 
 function App() {
 	return (
-		<h1>Hello world</h1>
+		<QuizzicalGame />
 	);
 }
 
