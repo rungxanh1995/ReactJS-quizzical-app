@@ -13,8 +13,7 @@ body {
 	height: 100vh;
 }
 
-.questions,
-.start-screen {
+.start-screen, .quiz-screen {
 	background-color: #F5F7FB;
 	background-image: url(./images/1blob-top.png), url(./images/1blob-bottom.png);
 	background-repeat: no-repeat;
@@ -29,7 +28,7 @@ body {
 	border-radius: 12px;
 }
 
-.questions {
+.quiz-screen {
 	padding: 30px 50px 25px 50px;
 	overflow: auto;
 }

@@ -4,7 +4,7 @@ import {CheckAnswers} from "./CheckAnswers";
 function QuizScreen(/* Object */ props) {
 	return (
 		<>
-			<div className="questions">
+			<div className="quiz-screen">
 				
 				{props.quizComponentList}
 				
