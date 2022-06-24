@@ -1,32 +1,30 @@
-import Confetti from "react-confetti";
+import {GameResult} from "./GameResult";
+import {CheckAnswers} from "./CheckAnswers";
 
 function QuizScreen(props) {
-	return <>
-		<div className="questions">
+	return (
+		<>
+			<div className="questions">
+				
+				{props.quizComponentList}
+				
+				<div className="checkQuestions--lbl">
+					{props.hasCheckedAnswers ? (
+						<GameResult
+							rightAnswerCount={props.rightAnswerCount}
+							allQuizzes={props.allQuizzes}
+							playAgain={props.playAgain}
+						/>
+					) : (
+						<CheckAnswers
+							checkAnswers={props.checkAnswers}
+						/>
+					)}
+				</div>
 			
-			{props.quizComponentList}
-			
-			<div className="checkQuestions--lbl">
-				{props.hasCheckedAnswers ? (
-					<>
-						<Confetti/>
-						<p>
-							You scored {props.rightAnswerCount + "/" + props.allQuizzes.length} correct
-							answers
-						</p>
-						<button className="btn btn--quiz-screen-main" onClick={props.playAgain}>
-							Play again
-						</button>
-					</>
-				) : (
-					<button className="btn btn--quiz-screen-main" onClick={props.checkAnswers}>
-						Check answers
-					</button>
-				)}
 			</div>
-			
-		</div>
-	</>;
+		</>
+	);
 }
 
 export default QuizScreen;
