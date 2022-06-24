@@ -127,7 +127,7 @@ body {
 	border: 1px solid #94d7a2;
 }
 
-.checkQuestions--lbl {
+.quiz-screen--check-answers {
 	display: flex;
 	align-items: center;
 	gap: 20px;

@@ -1,14 +1,14 @@
 import {GameResult} from "./GameResult";
 import {CheckAnswers} from "./CheckAnswers";
 
-function QuizScreen(props) {
+function QuizScreen(/* Object */ props) {
 	return (
 		<>
 			<div className="questions">
 				
 				{props.quizComponentList}
 				
-				<div className="checkQuestions--lbl">
+				<div className="quiz-screen--check-answers">
 					{props.hasCheckedAnswers ? (
 						<GameResult
 							rightAnswerCount={props.rightAnswerCount}
