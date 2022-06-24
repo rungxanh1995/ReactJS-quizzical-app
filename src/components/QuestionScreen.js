@@ -2,6 +2,7 @@ import React from "react";
 import ApiService from "../api/ApiService";
 import { nanoid } from "nanoid";
 import Quiz from "./Quiz";
+import ApiUrlConstants from "../api/ApiUrlConstants";
 
 function QuestionScreen() {
 	
@@ -16,7 +17,8 @@ function QuestionScreen() {
 	
 	React.useEffect(
 		() => {
-			new ApiService(/*url:*/ "https://opentdb.com/api.php?amount=5&type=multiple")
+			const geographyQuizUrl = new ApiUrlConstants().getUrl(/*for:*/ "geography");
+			new ApiService(/*url:*/ geographyQuizUrl)
 				.fetchData()
 				.then(quizData => setAllQuizes(quizData.results));
 		}, /*dependency array*/ []
