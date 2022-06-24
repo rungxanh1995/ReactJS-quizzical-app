@@ -1,10 +1,11 @@
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
-import Confetti from "react-confetti";
 import Quiz from './Quiz';
 import StartScreen from "./StartScreen";
 import ApiUrlConstants from "../api/ApiUrlConstants";
 import ApiService from "../api/ApiService";
+import QuizScreen from "./QuizScreen";
+
 
 function QuizzicalGame() {
 	const [hasStarted, setHasStarted] = useState(false)
@@ -109,37 +110,22 @@ function QuizzicalGame() {
 		/>
 	))
 	
-	function displayQuestions() {
+	function showQuizzes() {
 		return (
-			<>
-				<div className="questions">
-					{questionElements}
-					<div className="checkQuestions--lbl">
-						{hasCheckedAnswers ? (
-							<>
-								<Confetti />
-								<p>
-									You scored {rightAnswerCount + '/' + allQuizzes.length} correct
-									answers
-								</p>
-								<button className="btn btn--quiz-screen-main" onClick={playAgain}>
-									Play again
-								</button>
-							</>
-						) : (
-							<button className="btn btn--quiz-screen-main" onClick={checkAnswers}>
-								Check answers
-							</button>
-						)}
-					</div>
-				</div>
-			</>
+			<QuizScreen
+				quizComponentList={questionElements}
+				hasCheckedAnswers={hasCheckedAnswers}
+				rightAnswerCount={rightAnswerCount}
+				allQuizzes={allQuizzes}
+				playAgain={playAgain}
+				checkAnswers={checkAnswers}
+			/>
 		)
 	}
 	
 	return (
 		<div className="App">
-			{!hasStarted ? <StartScreen startQuiz={startQuiz} /> : displayQuestions()}
+			{!hasStarted ? <StartScreen startQuiz={startQuiz} /> : showQuizzes()}
 		</div>
 	)
 }
