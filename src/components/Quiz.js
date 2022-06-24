@@ -2,24 +2,31 @@ import React from "react";
 
 function Quiz(/*object*/ props) {
 	
-	const className = (answer) => {
-		let name = 'quiz--answer-btn'
-		if (props.hasCheckedAnswers) {
-			name += ' quiz--answer-checking'
-			if (answer.text === props.data.correctAnswer) {
-				name += ' quiz--answer-correct'
-			} else if (answer.isSelected) {
-				name += ' quiz--answer-incorrect'
-			}
-		} else if (answer.isSelected) {
-			name += ' quiz--answer-selected'
+	function decideClassNameFor(/* string */ anAnswer) {
+		const hasSelectedAnswers = anAnswer.isSelected;
+		const isAnswerCorrect = props.hasCheckedAnswers && (anAnswer.text === props.data.correctAnswer);
+		const isAnswerIncorrect = props.hasCheckedAnswers && anAnswer.isSelected;
+		
+		let name = 'quiz--answer-btn';
+		
+		if (hasSelectedAnswers) {
+			name += ' quiz--answer-selected';
 		}
-		return name
+		
+		if (isAnswerCorrect) {
+			name += ' quiz--answer-correct';
+		}
+		
+		if (isAnswerIncorrect) {
+			name += ' quiz--answer-incorrect';
+		}
+		
+		return name;
 	}
 	
 	let answerElements = props.data.answers.map((answer) => (
 		<button
-			className={className(answer)}
+			className={decideClassNameFor(answer)}
 			onClick={props.selectAnswer}
 			id={answer.id}
 			key={answer.id}
